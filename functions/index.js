@@ -171,8 +171,8 @@ exports.cleanupInactiveSessions = functions.pubsub
 
       inactiveSessions.forEach(doc => {
         const data = doc.data();
-        const lastUpdate = (data.lastUpdate && data.lastUpdate.toMillis) ? data.lastUpdate.toMillis() : 0;
-        
+        const lastUpdate = data.lastUpdate ? (data.lastUpdate.toMillis ? data.lastUpdate.toMillis() : 0) : 0;
+
         if (lastUpdate < cutoffTime) {
           batch.delete(doc.ref);
           deleteCount++;
@@ -398,4 +398,3 @@ exports.getBusETAs = functions.https.onRequest(async (req, res) => {
     return res.status(500).json({ error: 'Internal server error' });
   }
 });
-
