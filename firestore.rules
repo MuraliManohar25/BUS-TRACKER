@@ -1,0 +1,42 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Anonymous sessions - users can only read/write their own session
+    match /sessions/{sessionId} {
+      allow read: if request.auth != null && request.auth.uid == sessionId;
+      allow create: if request.auth != null && request.auth.uid == sessionId;
+      allow update: if request.auth != null && request.auth.uid == sessionId;
+      allow delete: if request.auth != null && request.auth.uid == sessionId;
+    }
+    
+    // Bus locations - public read, only functions can write
+    match /buses/{busId} {
+      allow read: if true;
+      allow write: if false; // Only Cloud Functions can write
+    }
+    
+    // Routes - public read
+    match /routes/{routeId} {
+      allow read: if true;
+      allow write: if false; // Only admins via functions
+    }
+    
+    // Stops - public read
+    match /stops/{stopId} {
+      allow read: if true;
+      allow write: if false;
+    }
+    
+    // Admin stats - read only for authenticated users
+    match /admin/{document=**} {
+      allow read: if request.auth != null;
+      allow write: if false; // Only functions
+    }
+    
+    // User preferences - users can only access their own
+    match /userPreferences/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+  }
+}
+
