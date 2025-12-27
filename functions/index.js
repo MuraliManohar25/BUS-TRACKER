@@ -171,7 +171,7 @@ exports.cleanupInactiveSessions = functions.pubsub
 
       inactiveSessions.forEach(doc => {
         const data = doc.data();
-        const lastUpdate = data.lastUpdate && data.lastUpdate.toMillis ? data.lastUpdate.toMillis() : 0;
+        const lastUpdate = (data.lastUpdate && data.lastUpdate.toMillis) ? data.lastUpdate.toMillis() : 0;
         
         if (lastUpdate < cutoffTime) {
           batch.delete(doc.ref);
