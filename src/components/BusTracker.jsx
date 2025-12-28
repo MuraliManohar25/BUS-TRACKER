@@ -267,8 +267,11 @@ const BusTracker = ({ userId }) => {
   };
 
   const handleBeaconToggle = async (active) => {
+<<<<<<< HEAD
     console.log('Toggle clicked:', active, 'Current state:', isBeaconActive);
     
+=======
+>>>>>>> dc43d9005eadfc665dee902509676fa6e79b112f
     if (!beaconServiceRef.current) {
       setLocationError('Services not initialized. Please refresh the page.');
       return;
@@ -280,6 +283,7 @@ const BusTracker = ({ userId }) => {
     }
 
     if (active) {
+<<<<<<< HEAD
       // Request location permission and get current location
       setLocationError('Requesting location access...');
       
@@ -310,6 +314,41 @@ const BusTracker = ({ userId }) => {
           );
         });
       };
+=======
+      // Request location permission first
+      if (!userLocation) {
+        setLocationError('Requesting location access...');
+        try {
+          // Start location tracking to get user location
+          startLocationTracking();
+          
+          // Wait a bit for location to be obtained
+          setTimeout(async () => {
+            if (!userLocation) {
+              setLocationError('Location access denied. Please allow location access in your browser settings.');
+              return;
+            }
+            
+            try {
+              await beaconServiceRef.current.startBeacon(selectedBus, {
+                latitude: userLocation.lat,
+                longitude: userLocation.lng,
+                accuracy: 10
+              });
+              setIsBeaconActive(true);
+              setLocationError(null);
+            } catch (error) {
+              console.error('Error starting beacon:', error);
+              setLocationError('Failed to start beacon. ' + (error.message || 'Please try again.'));
+            }
+          }, 2000);
+        } catch (error) {
+          console.error('Location error:', error);
+          setLocationError('Unable to access location. Please check browser permissions.');
+        }
+        return;
+      }
+>>>>>>> dc43d9005eadfc665dee902509676fa6e79b112f
 
       try {
         // Get current location
@@ -320,6 +359,7 @@ const BusTracker = ({ userId }) => {
         
         // Start location tracking for continuous updates
         startLocationTracking();
+<<<<<<< HEAD
         
         // Start beacon with current location
         try {
@@ -353,6 +393,16 @@ const BusTracker = ({ userId }) => {
           setLocationError('Location request timed out. Please try again.');
         } else {
           setLocationError('Unable to access location: ' + (error.message || 'Unknown error'));
+=======
+        setLocationError(null);
+      } catch (error) {
+        console.error('Error starting beacon:', error);
+        const errorMsg = error.message || 'Please try again.';
+        if (errorMsg.includes('permission') || errorMsg.includes('Permission')) {
+          setLocationError('Permission denied. Please check Firestore rules are deployed.');
+        } else {
+          setLocationError('Failed to start beacon. ' + errorMsg);
+>>>>>>> dc43d9005eadfc665dee902509676fa6e79b112f
         }
       }
     } else {
@@ -364,12 +414,18 @@ const BusTracker = ({ userId }) => {
           locationTrackerRef.current.stop();
         }
         setLocationError(null);
+<<<<<<< HEAD
         console.log('Beacon stopped successfully');
       } catch (error) {
         console.error('Error stopping beacon:', error);
         setLocationError('Failed to stop beacon. ' + (error.message || ''));
         // Still set inactive even if stop fails
         setIsBeaconActive(false);
+=======
+      } catch (error) {
+        console.error('Error stopping beacon:', error);
+        setLocationError('Failed to stop beacon. ' + (error.message || ''));
+>>>>>>> dc43d9005eadfc665dee902509676fa6e79b112f
       }
     }
   };
@@ -610,6 +666,7 @@ const BusTracker = ({ userId }) => {
                   </p>
                 </div>
                 {/* Custom Toggle Switch */}
+<<<<<<< HEAD
                 <button
                   type="button"
                   onClick={() => {
@@ -633,6 +690,23 @@ const BusTracker = ({ userId }) => {
                     isBeaconActive ? 'translate-x-6' : 'translate-x-0'
                   }`}></div>
                 </button>
+=======
+                <label className={`relative flex h-8 w-14 cursor-pointer items-center rounded-full border-none bg-slate-200 dark:bg-slate-600 p-1 transition-colors duration-200 ${isBeaconActive ? 'bg-blue-600 justify-end' : ''} ${!selectedBus ? 'opacity-50 cursor-not-allowed' : ''}`}>
+                  <input 
+                    className="peer sr-only" 
+                    type="checkbox"
+                    checked={isBeaconActive}
+                    disabled={!selectedBus}
+                    onChange={(e) => {
+                      if (selectedBus) {
+                        handleBeaconToggle(e.target.checked);
+                      }
+                    }}
+                    aria-label="Toggle beacon tracking"
+                  />
+                  <div className="h-6 w-6 rounded-full bg-white shadow-sm transition-all duration-200 peer-checked:translate-x-6"></div>
+                </label>
+>>>>>>> dc43d9005eadfc665dee902509676fa6e79b112f
               </div>
 
               {/* Profile Stats / Trip Metrics */}

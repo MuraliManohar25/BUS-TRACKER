@@ -13,7 +13,11 @@ export default {
         "background-dark": "#101922",
       },
       fontFamily: {
+<<<<<<< HEAD
         "display": ["Inter", "system-ui","sans-serif"]
+=======
+        "display": ["Inter","system-ui", "sans-serif"]
+>>>>>>> dc43d9005eadfc665dee902509676fa6e79b112f
       },
       borderRadius: {
         "DEFAULT": "0.25rem",
