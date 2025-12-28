@@ -16,23 +16,4 @@
  *
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.BaseFilter = void 0;
-class BaseFilter {
-    async sendMetadata(metadata) {
-        return metadata;
-    }
-    receiveMetadata(metadata) {
-        return metadata;
-    }
-    async sendMessage(message) {
-        return message;
-    }
-    async receiveMessage(message) {
-        return message;
-    }
-    receiveTrailers(status) {
-        return status;
-    }
-}
-exports.BaseFilter = BaseFilter;
-//# sourceMappingURL=filter.js.map
+//# sourceMappingURL=object-stream.js.map

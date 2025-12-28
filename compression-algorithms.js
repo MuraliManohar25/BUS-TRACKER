@@ -1,6 +1,6 @@
 "use strict";
 /*
- * Copyright 2019 gRPC authors.
+ * Copyright 2021 gRPC authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,23 +16,11 @@
  *
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.BaseFilter = void 0;
-class BaseFilter {
-    async sendMetadata(metadata) {
-        return metadata;
-    }
-    receiveMetadata(metadata) {
-        return metadata;
-    }
-    async sendMessage(message) {
-        return message;
-    }
-    async receiveMessage(message) {
-        return message;
-    }
-    receiveTrailers(status) {
-        return status;
-    }
-}
-exports.BaseFilter = BaseFilter;
-//# sourceMappingURL=filter.js.map
+exports.CompressionAlgorithms = void 0;
+var CompressionAlgorithms;
+(function (CompressionAlgorithms) {
+    CompressionAlgorithms[CompressionAlgorithms["identity"] = 0] = "identity";
+    CompressionAlgorithms[CompressionAlgorithms["deflate"] = 1] = "deflate";
+    CompressionAlgorithms[CompressionAlgorithms["gzip"] = 2] = "gzip";
+})(CompressionAlgorithms || (exports.CompressionAlgorithms = CompressionAlgorithms = {}));
+//# sourceMappingURL=compression-algorithms.js.map

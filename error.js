@@ -1,6 +1,6 @@
 "use strict";
 /*
- * Copyright 2019 gRPC authors.
+ * Copyright 2022 gRPC authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,23 +16,25 @@
  *
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.BaseFilter = void 0;
-class BaseFilter {
-    async sendMetadata(metadata) {
-        return metadata;
+exports.getErrorMessage = getErrorMessage;
+exports.getErrorCode = getErrorCode;
+function getErrorMessage(error) {
+    if (error instanceof Error) {
+        return error.message;
     }
-    receiveMetadata(metadata) {
-        return metadata;
-    }
-    async sendMessage(message) {
-        return message;
-    }
-    async receiveMessage(message) {
-        return message;
-    }
-    receiveTrailers(status) {
-        return status;
+    else {
+        return String(error);
     }
 }
-exports.BaseFilter = BaseFilter;
-//# sourceMappingURL=filter.js.map
+function getErrorCode(error) {
+    if (typeof error === 'object' &&
+        error !== null &&
+        'code' in error &&
+        typeof error.code === 'number') {
+        return error.code;
+    }
+    else {
+        return null;
+    }
+}
+//# sourceMappingURL=error.js.map

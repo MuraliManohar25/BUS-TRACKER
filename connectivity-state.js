@@ -1,6 +1,6 @@
 "use strict";
 /*
- * Copyright 2019 gRPC authors.
+ * Copyright 2021 gRPC authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,23 +16,13 @@
  *
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.BaseFilter = void 0;
-class BaseFilter {
-    async sendMetadata(metadata) {
-        return metadata;
-    }
-    receiveMetadata(metadata) {
-        return metadata;
-    }
-    async sendMessage(message) {
-        return message;
-    }
-    async receiveMessage(message) {
-        return message;
-    }
-    receiveTrailers(status) {
-        return status;
-    }
-}
-exports.BaseFilter = BaseFilter;
-//# sourceMappingURL=filter.js.map
+exports.ConnectivityState = void 0;
+var ConnectivityState;
+(function (ConnectivityState) {
+    ConnectivityState[ConnectivityState["IDLE"] = 0] = "IDLE";
+    ConnectivityState[ConnectivityState["CONNECTING"] = 1] = "CONNECTING";
+    ConnectivityState[ConnectivityState["READY"] = 2] = "READY";
+    ConnectivityState[ConnectivityState["TRANSIENT_FAILURE"] = 3] = "TRANSIENT_FAILURE";
+    ConnectivityState[ConnectivityState["SHUTDOWN"] = 4] = "SHUTDOWN";
+})(ConnectivityState || (exports.ConnectivityState = ConnectivityState = {}));
+//# sourceMappingURL=connectivity-state.js.map
