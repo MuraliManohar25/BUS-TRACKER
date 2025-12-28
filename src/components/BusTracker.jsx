@@ -287,7 +287,7 @@ const BusTracker = ({ userId }) => {
   const currentBus = buses.find(b => b.id === selectedBus);
 
   // Check if Google Maps API key is set
-  const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+  const apiKey = import.meta.env.AIzaSyAI-igBUNSqOXz6aouzNTbL76uhBbttn_U;
   
   if (!apiKey) {
     return (
