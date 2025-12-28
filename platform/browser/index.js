@@ -13,22 +13,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { ROOT_CONTEXT } from './context';
-export class NoopContextManager {
-    active() {
-        return ROOT_CONTEXT;
-    }
-    with(_context, fn, thisArg, ...args) {
-        return fn.call(thisArg, ...args);
-    }
-    bind(_context, target) {
-        return target;
-    }
-    enable() {
-        return this;
-    }
-    disable() {
-        return this;
-    }
-}
-//# sourceMappingURL=NoopContextManager.js.map
+export * from './globalThis';
+//# sourceMappingURL=index.js.map

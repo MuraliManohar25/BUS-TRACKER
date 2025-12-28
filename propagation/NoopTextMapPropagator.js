@@ -16,19 +16,15 @@
 /**
  * No-op implementations of {@link TextMapPropagator}.
  */
-var NoopTextMapPropagator = /** @class */ (function () {
-    function NoopTextMapPropagator() {
-    }
+export class NoopTextMapPropagator {
     /** Noop inject function does nothing */
-    NoopTextMapPropagator.prototype.inject = function (_context, _carrier) { };
+    inject(_context, _carrier) { }
     /** Noop extract function does nothing and returns the input context */
-    NoopTextMapPropagator.prototype.extract = function (context, _carrier) {
+    extract(context, _carrier) {
         return context;
-    };
-    NoopTextMapPropagator.prototype.fields = function () {
+    }
+    fields() {
         return [];
-    };
-    return NoopTextMapPropagator;
-}());
-export { NoopTextMapPropagator };
+    }
+}
 //# sourceMappingURL=NoopTextMapPropagator.js.map
