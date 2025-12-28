@@ -1,8 +1,9 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, signInAnonymously } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
-import { getFunctions } from 'firebase/functions';
-import { getMessaging, getToken, onMessage } from 'firebase/messaging';
+// Cloud Functions removed - not needed for free tier
+// import { getFunctions } from 'firebase/functions';
+// import { getMessaging, getToken, onMessage } from 'firebase/messaging';
 
 // Firebase configuration
 const firebaseConfig = {
@@ -18,8 +19,9 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
-export const functions = getFunctions(app);
-export const messaging = typeof window !== 'undefined' ? getMessaging(app) : null;
+// Cloud Functions not available on free tier
+// export const functions = getFunctions(app);
+// export const messaging = typeof window !== 'undefined' ? getMessaging(app) : null;
 
 // Anonymous authentication helper
 export const authenticateAnonymously = async () => {
@@ -32,29 +34,10 @@ export const authenticateAnonymously = async () => {
   }
 };
 
-// FCM token helper
-export const getFCMToken = async () => {
-  if (!messaging) return null;
-  try {
-    const token = await getToken(messaging, {
-      vapidKey: 'YOUR_VAPID_KEY'
-    });
-    return token;
-  } catch (error) {
-    console.error('FCM token error:', error);
-    return null;
-  }
-};
-
-// Listen for foreground messages
-export const onMessageListener = () => {
-  if (!messaging) return Promise.resolve();
-  return new Promise((resolve) => {
-    onMessage(messaging, (payload) => {
-      resolve(payload);
-    });
-  });
-};
+// FCM (Push Notifications) - Disabled for free tier
+// Push notifications require Cloud Functions (Blaze plan)
+// export const getFCMToken = async () => { ... }
+// export const onMessageListener = () => { ... }
 
 export default app;
 

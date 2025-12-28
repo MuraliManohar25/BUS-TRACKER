@@ -33,12 +33,13 @@ Instead of installing expensive GPS hardware on buses, this system uses students
 - **State Management**: React Hooks
 - **Styling**: CSS Modules
 
-### Backend
-- **Database**: Firebase Firestore
-- **Authentication**: Firebase Anonymous Auth
-- **Cloud Functions**: Location aggregation, ETA calculations, notifications
-- **Real-time Updates**: Firestore real-time listeners
-- **Notifications**: Firebase Cloud Messaging (FCM)
+### Backend (Free Tier - No Premium Required!)
+- **Database**: Firebase Firestore (Free tier: 50K reads/day)
+- **Authentication**: Firebase Anonymous Auth (Free)
+- **Location Aggregation**: Client-side (runs in browser)
+- **Real-time Updates**: Firestore real-time listeners (Free)
+- **ETA Calculations**: Client-side (no server needed)
+- **Hosting**: Firebase Hosting (Free tier available)
 
 ### Key Components
 
@@ -189,17 +190,27 @@ firebase init
 
 3. **Configure Firebase**
    - Update `src/firebase/config.js` with your Firebase config
-   - Update `index.html` with your Google Maps API key
-   - Update `functions/index.js` VAPID key for FCM
+   - Get config from: Firebase Console > Project Settings > General
+   - Google Maps API key is already configured in code
 
-4. **Deploy**
+4. **Enable Firebase Services (Free Tier)**
+   - **Firestore**: Create database at https://console.firebase.google.com/project/YOUR_PROJECT/firestore
+   - **Authentication**: Enable Anonymous sign-in at https://console.firebase.google.com/project/YOUR_PROJECT/authentication
+   - **No billing required!**
+
+5. **Deploy Firestore Rules**
 ```bash
-# Deploy functions
-npm run deploy-functions
+# Use Command Prompt (not PowerShell)
+npx firebase-tools deploy --only firestore:rules
+```
 
-# Build and deploy frontend
+6. **Deploy Frontend (Optional)**
+```bash
+# Build
 npm run build
-firebase deploy --only hosting
+
+# Deploy to Firebase Hosting
+npx firebase-tools deploy --only hosting
 ```
 
 ### Development
@@ -242,18 +253,19 @@ Users can enable push notifications to receive alerts when:
 - Automatic sync when connection restored
 - Visual indicator for offline mode
 
-## 🛠️ Cloud Functions
+## 🛠️ Backend Architecture (Free Tier)
 
-### Scheduled Functions
-- **aggregateBusLocations**: Runs every 10 seconds to aggregate beacon locations
-- **cleanupInactiveSessions**: Runs hourly to remove old sessions
-- **updateAdminStats**: Runs every 5 minutes to update statistics
+### Client-Side Processing (No Cloud Functions Needed!)
+- **Location Aggregation**: Runs client-side every 15 seconds
+- **ETA Calculations**: Calculated in browser
+- **Real-time Updates**: Firestore real-time listeners
+- **No Premium Plan Required**: Works 100% on Firebase free tier
 
-### Triggered Functions
-- **calculateETAs**: Triggered on bus location updates to calculate ETAs
-
-### HTTP Functions
-- **getBusETAs**: REST endpoint for external integrations
+### Optional: Cloud Functions (Requires Blaze Plan)
+If you upgrade to Blaze plan, you can use:
+- **aggregateBusLocations**: Server-side aggregation (optional)
+- **cleanupInactiveSessions**: Automatic cleanup (optional)
+- **updateAdminStats**: Server-side statistics (optional)
 
 ## 📈 Scalability
 
