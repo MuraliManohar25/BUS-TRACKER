@@ -4,6 +4,7 @@ import { LocationTracker } from '../utils/locationTracker';
 import { BeaconService } from '../services/beaconService';
 import { BusService } from '../services/busService';
 import { ETAService } from '../services/etaService';
+import { LocationAggregator } from '../services/locationAggregator';
 import { OfflineStorage } from '../utils/offlineStorage';
 
 const mapContainerStyle = {
@@ -40,6 +41,7 @@ const BusTracker = ({ userId }) => {
   const busServiceRef = useRef(null);
   const mapRef = useRef(null);
   const mountedRef = useRef(true);
+  const aggregationIntervalRef = useRef(null);
 
   // Initialize services and data
   useEffect(() => {
@@ -151,7 +153,7 @@ const BusTracker = ({ userId }) => {
     }
   };
 
-  // Subscribe to bus location updates
+  // Subscribe to bus location updates and start client-side aggregation
   useEffect(() => {
     if (!selectedBus || !beaconServiceRef.current) return;
 
@@ -159,6 +161,28 @@ const BusTracker = ({ userId }) => {
 
     loadStops();
 
+    // Client-side aggregation (replaces Cloud Functions - works on free tier)
+    const cleanupAggregation = LocationAggregator.startAggregation(
+      selectedBus,
+      (aggregatedData) => {
+        if (!isMounted) return;
+        
+        if (aggregatedData.location) {
+          setBusLocation({
+            lat: aggregatedData.location.latitude,
+            lng: aggregatedData.location.longitude
+          });
+          setBusData({
+            location: aggregatedData.location,
+            beaconCount: aggregatedData.beaconCount,
+            speed: aggregatedData.speed
+          });
+          setBeaconCount(aggregatedData.beaconCount || 0);
+        }
+      }
+    );
+
+    // Also listen to Firestore for real-time updates
     const unsubscribe = beaconServiceRef.current.subscribeToBusLocation(
       selectedBus,
       (locationData) => {
@@ -175,8 +199,11 @@ const BusTracker = ({ userId }) => {
       }
     );
 
+    aggregationIntervalRef.current = cleanupAggregation;
+
     return () => {
       isMounted = false;
+      if (cleanupAggregation) cleanupAggregation();
       if (unsubscribe) unsubscribe();
     };
   }, [selectedBus]);
