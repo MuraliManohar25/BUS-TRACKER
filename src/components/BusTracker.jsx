@@ -120,12 +120,34 @@ const BusTracker = ({ userId }) => {
       if (mountedRef.current) {
         setBuses(activeBuses);
         
-        if (activeBuses.length > 0 && !selectedBus) {
+        // If no buses, create a default one for testing
+        if (activeBuses.length === 0) {
+          console.warn('No buses found. Using default bus for testing.');
+          const defaultBus = {
+            id: 'default-bus-1',
+            name: 'Campus Loop A',
+            routeId: 'route-1',
+            isActive: true
+          };
+          setBuses([defaultBus]);
+          setSelectedBus(defaultBus.id);
+        } else if (activeBuses.length > 0 && !selectedBus) {
           setSelectedBus(activeBuses[0].id);
         }
       }
     } catch (error) {
       console.error('Error loading buses:', error);
+      // Create default bus on error for testing
+      if (mountedRef.current) {
+        const defaultBus = {
+          id: 'default-bus-1',
+          name: 'Campus Loop A',
+          routeId: 'route-1',
+          isActive: true
+        };
+        setBuses([defaultBus]);
+        setSelectedBus(defaultBus.id);
+      }
     }
   };
 
@@ -218,12 +240,48 @@ const BusTracker = ({ userId }) => {
   };
 
   const handleBeaconToggle = async (active) => {
-    if (!beaconServiceRef.current || !selectedBus) return;
+    if (!beaconServiceRef.current) {
+      setLocationError('Services not initialized. Please refresh the page.');
+      return;
+    }
+
+    if (!selectedBus) {
+      setLocationError('Please select a bus first.');
+      return;
+    }
 
     if (active) {
+      // Request location permission first
       if (!userLocation) {
-        setLocationError('Please allow location access to start beacon');
-        startLocationTracking();
+        setLocationError('Requesting location access...');
+        try {
+          // Start location tracking to get user location
+          startLocationTracking();
+          
+          // Wait a bit for location to be obtained
+          setTimeout(async () => {
+            if (!userLocation) {
+              setLocationError('Location access denied. Please allow location access in your browser settings.');
+              return;
+            }
+            
+            try {
+              await beaconServiceRef.current.startBeacon(selectedBus, {
+                latitude: userLocation.lat,
+                longitude: userLocation.lng,
+                accuracy: 10
+              });
+              setIsBeaconActive(true);
+              setLocationError(null);
+            } catch (error) {
+              console.error('Error starting beacon:', error);
+              setLocationError('Failed to start beacon. ' + (error.message || 'Please try again.'));
+            }
+          }, 2000);
+        } catch (error) {
+          console.error('Location error:', error);
+          setLocationError('Unable to access location. Please check browser permissions.');
+        }
         return;
       }
 
@@ -238,7 +296,12 @@ const BusTracker = ({ userId }) => {
         setLocationError(null);
       } catch (error) {
         console.error('Error starting beacon:', error);
-        setLocationError('Failed to start beacon. Please try again.');
+        const errorMsg = error.message || 'Please try again.';
+        if (errorMsg.includes('permission') || errorMsg.includes('Permission')) {
+          setLocationError('Permission denied. Please check Firestore rules are deployed.');
+        } else {
+          setLocationError('Failed to start beacon. ' + errorMsg);
+        }
       }
     } else {
       try {
@@ -247,9 +310,10 @@ const BusTracker = ({ userId }) => {
         if (locationTrackerRef.current) {
           locationTrackerRef.current.stop();
         }
+        setLocationError(null);
       } catch (error) {
         console.error('Error stopping beacon:', error);
-        setLocationError('Failed to stop beacon.');
+        setLocationError('Failed to stop beacon. ' + (error.message || ''));
       }
     }
   };
@@ -286,22 +350,8 @@ const BusTracker = ({ userId }) => {
   const nextStop = etas.length > 0 ? etas[0] : null;
   const currentBus = buses.find(b => b.id === selectedBus);
 
-  // Check if Google Maps API key is set
-  const apiKey = import.meta.env.AIzaSyAI-igBUNSqOXz6aouzNTbL76uhBbttn_U;
-  
-  if (!apiKey) {
-    return (
-      <div className="flex items-center justify-center h-screen bg-background-light dark:bg-background-dark">
-        <div className="text-center p-8 bg-white dark:bg-slate-800 rounded-2xl shadow-lg max-w-md">
-          <span className="material-symbols-outlined text-red-500 text-6xl mb-4">error</span>
-          <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-2">Configuration Error</h2>
-          <p className="text-slate-600 dark:text-slate-400">
-            Google Maps API key is not configured. Please set VITE_GOOGLE_MAPS_API_KEY in your environment variables.
-          </p>
-        </div>
-      </div>
-    );
-  }
+  // Google Maps API key
+  const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "AIzaSyAI-igBUNSqOXz6aouzNTbL76uhBbttn_U";
 
   return (
     <div className="relative w-full h-screen overflow-hidden bg-background-light dark:bg-background-dark font-sans">
@@ -499,15 +549,22 @@ const BusTracker = ({ userId }) => {
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 rounded-2xl border border-blue-100 dark:border-blue-900/30 bg-blue-50/50 dark:bg-slate-800/50 p-5">
                 <div className="flex flex-col gap-1">
                   <p className="text-slate-900 dark:text-white text-base font-bold leading-tight">Riding this bus?</p>
-                  <p className="text-slate-500 dark:text-slate-400 text-sm font-normal leading-normal">Tap to improve tracking accuracy</p>
+                  <p className="text-slate-500 dark:text-slate-400 text-sm font-normal leading-normal">
+                    {selectedBus ? 'Tap to improve tracking accuracy' : 'Select a bus first'}
+                  </p>
                 </div>
                 {/* Custom Toggle Switch */}
-                <label className="relative flex h-8 w-14 cursor-pointer items-center rounded-full border-none bg-slate-200 dark:bg-slate-600 p-1 transition-colors duration-200 has-[:checked]:bg-blue-600 has-[:checked]:justify-end">
+                <label className={`relative flex h-8 w-14 cursor-pointer items-center rounded-full border-none bg-slate-200 dark:bg-slate-600 p-1 transition-colors duration-200 ${isBeaconActive ? 'bg-blue-600 justify-end' : ''} ${!selectedBus ? 'opacity-50 cursor-not-allowed' : ''}`}>
                   <input 
                     className="peer sr-only" 
                     type="checkbox"
                     checked={isBeaconActive}
-                    onChange={(e) => handleBeaconToggle(e.target.checked)}
+                    disabled={!selectedBus}
+                    onChange={(e) => {
+                      if (selectedBus) {
+                        handleBeaconToggle(e.target.checked);
+                      }
+                    }}
                     aria-label="Toggle beacon tracking"
                   />
                   <div className="h-6 w-6 rounded-full bg-white shadow-sm transition-all duration-200 peer-checked:translate-x-6"></div>
