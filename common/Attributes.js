@@ -1,3 +1,4 @@
+"use strict";
 /*
  * Copyright The OpenTelemetry Authors
  *
@@ -13,5 +14,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export {};
+Object.defineProperty(exports, "__esModule", { value: true });
 //# sourceMappingURL=Attributes.js.map

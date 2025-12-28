@@ -17,5 +17,5 @@
 // tree-shaking on each api instance.
 import { PropagationAPI } from './api/propagation';
 /** Entrypoint for propagation API */
-export var propagation = PropagationAPI.getInstance();
+export const propagation = PropagationAPI.getInstance();
 //# sourceMappingURL=propagation-api.js.map

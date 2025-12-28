@@ -1,3 +1,4 @@
+"use strict";
 /*
  * Copyright The OpenTelemetry Authors
  *
@@ -13,16 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { DiagComponentLogger } from '../diag/ComponentLogger';
-import { createLogLevelDiagLogger } from '../diag/internal/logLevelLogger';
-import { DiagLogLevel, } from '../diag/types';
-import { getGlobal, registerGlobal, unregisterGlobal, } from '../internal/global-utils';
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.DiagAPI = void 0;
+const ComponentLogger_1 = require("../diag/ComponentLogger");
+const logLevelLogger_1 = require("../diag/internal/logLevelLogger");
+const types_1 = require("../diag/types");
+const global_utils_1 = require("../internal/global-utils");
 const API_NAME = 'diag';
 /**
  * Singleton object which represents the entry point to the OpenTelemetry internal
  * diagnostic API
  */
-export class DiagAPI {
+class DiagAPI {
     /**
      * Private internal constructor
      * @private
@@ -30,7 +33,7 @@ export class DiagAPI {
     constructor() {
         function _logProxy(funcName) {
             return function (...args) {
-                const logger = getGlobal('diag');
+                const logger = (0, global_utils_1.getGlobal)('diag');
                 // shortcut if logger not set
                 if (!logger)
                     return;
@@ -40,7 +43,7 @@ export class DiagAPI {
         // Using self local variable for minification purposes as 'this' cannot be minified
         const self = this;
         // DiagAPI specific functions
-        const setLogger = (logger, optionsOrLogLevel = { logLevel: DiagLogLevel.INFO }) => {
+        const setLogger = (logger, optionsOrLogLevel = { logLevel: types_1.DiagLogLevel.INFO }) => {
             var _a, _b, _c;
             if (logger === self) {
                 // There isn't much we can do here.
@@ -55,22 +58,22 @@ export class DiagAPI {
                     logLevel: optionsOrLogLevel,
                 };
             }
-            const oldLogger = getGlobal('diag');
-            const newLogger = createLogLevelDiagLogger((_b = optionsOrLogLevel.logLevel) !== null && _b !== void 0 ? _b : DiagLogLevel.INFO, logger);
+            const oldLogger = (0, global_utils_1.getGlobal)('diag');
+            const newLogger = (0, logLevelLogger_1.createLogLevelDiagLogger)((_b = optionsOrLogLevel.logLevel) !== null && _b !== void 0 ? _b : types_1.DiagLogLevel.INFO, logger);
             // There already is an logger registered. We'll let it know before overwriting it.
             if (oldLogger && !optionsOrLogLevel.suppressOverrideMessage) {
                 const stack = (_c = new Error().stack) !== null && _c !== void 0 ? _c : '<failed to generate stacktrace>';
                 oldLogger.warn(`Current logger will be overwritten from ${stack}`);
                 newLogger.warn(`Current logger will overwrite one already registered from ${stack}`);
             }
-            return registerGlobal('diag', newLogger, self, true);
+            return (0, global_utils_1.registerGlobal)('diag', newLogger, self, true);
         };
         self.setLogger = setLogger;
         self.disable = () => {
-            unregisterGlobal(API_NAME, self);
+            (0, global_utils_1.unregisterGlobal)(API_NAME, self);
         };
         self.createComponentLogger = (options) => {
-            return new DiagComponentLogger(options);
+            return new ComponentLogger_1.DiagComponentLogger(options);
         };
         self.verbose = _logProxy('verbose');
         self.debug = _logProxy('debug');
@@ -86,4 +89,5 @@ export class DiagAPI {
         return this._instance;
     }
 }
+exports.DiagAPI = DiagAPI;
 //# sourceMappingURL=diag.js.map

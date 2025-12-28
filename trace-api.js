@@ -17,5 +17,5 @@
 // tree-shaking on each api instance.
 import { TraceAPI } from './api/trace';
 /** Entrypoint for trace API */
-export var trace = TraceAPI.getInstance();
+export const trace = TraceAPI.getInstance();
 //# sourceMappingURL=trace-api.js.map

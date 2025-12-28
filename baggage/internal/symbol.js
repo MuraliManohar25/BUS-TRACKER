@@ -1,3 +1,4 @@
+"use strict";
 /*
  * Copyright The OpenTelemetry Authors
  *
@@ -13,8 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.baggageEntryMetadataSymbol = void 0;
 /**
  * Symbol used to make BaggageEntryMetadata an opaque type
  */
-export const baggageEntryMetadataSymbol = Symbol('BaggageEntryMetadata');
+exports.baggageEntryMetadataSymbol = Symbol('BaggageEntryMetadata');
 //# sourceMappingURL=symbol.js.map

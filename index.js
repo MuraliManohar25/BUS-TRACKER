@@ -44,10 +44,10 @@ import { trace } from './trace-api';
 export { context, diag, metrics, propagation, trace };
 // Default export.
 export default {
-    context: context,
-    diag: diag,
-    metrics: metrics,
-    propagation: propagation,
-    trace: trace,
+    context,
+    diag,
+    metrics,
+    propagation,
+    trace,
 };
 //# sourceMappingURL=index.js.map

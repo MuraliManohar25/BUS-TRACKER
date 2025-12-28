@@ -1,3 +1,4 @@
+"use strict";
 /*
  * Copyright The OpenTelemetry Authors
  *
@@ -13,6 +14,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports._globalThis = void 0;
 // Updates to this file should also be replicated to @opentelemetry/core too.
 /**
  * - globalThis (New standard)
@@ -23,7 +26,7 @@
  */
 /** only globals that common to node and browsers are allowed */
 // eslint-disable-next-line node/no-unsupported-features/es-builtins, no-undef
-export const _globalThis = typeof globalThis === 'object'
+exports._globalThis = typeof globalThis === 'object'
     ? globalThis
     : typeof self === 'object'
         ? self

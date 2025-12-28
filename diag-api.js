@@ -22,5 +22,5 @@ import { DiagAPI } from './api/diag';
  * The default provides a Noop DiagLogger implementation which may be changed via the
  * diag.setLogger(logger: DiagLogger) function.
  */
-export var diag = DiagAPI.instance();
+export const diag = DiagAPI.instance();
 //# sourceMappingURL=diag-api.js.map

@@ -1,3 +1,4 @@
+"use strict";
 /*
  * Copyright The OpenTelemetry Authors
  *
@@ -13,6 +14,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.DiagConsoleLogger = void 0;
 const consoleMap = [
     { n: 'error', c: 'error' },
     { n: 'warn', c: 'warn' },
@@ -25,7 +28,7 @@ const consoleMap = [
  * If you want to limit the amount of logging to a specific level or lower use the
  * {@link createLogLevelDiagLogger}
  */
-export class DiagConsoleLogger {
+class DiagConsoleLogger {
     constructor() {
         function _consoleFunc(funcName) {
             return function (...args) {
@@ -50,4 +53,5 @@ export class DiagConsoleLogger {
         }
     }
 }
+exports.DiagConsoleLogger = DiagConsoleLogger;
 //# sourceMappingURL=consoleLogger.js.map

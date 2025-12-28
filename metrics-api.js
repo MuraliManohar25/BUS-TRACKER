@@ -17,5 +17,5 @@
 // tree-shaking on each api instance.
 import { MetricsAPI } from './api/metrics';
 /** Entrypoint for metrics API */
-export var metrics = MetricsAPI.getInstance();
+export const metrics = MetricsAPI.getInstance();
 //# sourceMappingURL=metrics-api.js.map

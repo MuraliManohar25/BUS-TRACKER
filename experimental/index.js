@@ -1,3 +1,6 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.SugaredTracer = exports.wrapTracer = void 0;
 /*
  * Copyright The OpenTelemetry Authors
  *
@@ -13,5 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { wrapTracer, SugaredTracer } from './trace/SugaredTracer';
+var SugaredTracer_1 = require("./trace/SugaredTracer");
+Object.defineProperty(exports, "wrapTracer", { enumerable: true, get: function () { return SugaredTracer_1.wrapTracer; } });
+Object.defineProperty(exports, "SugaredTracer", { enumerable: true, get: function () { return SugaredTracer_1.SugaredTracer; } });
 //# sourceMappingURL=index.js.map

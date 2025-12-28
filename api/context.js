@@ -1,3 +1,4 @@
+"use strict";
 /*
  * Copyright The OpenTelemetry Authors
  *
@@ -13,15 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { NoopContextManager } from '../context/NoopContextManager';
-import { getGlobal, registerGlobal, unregisterGlobal, } from '../internal/global-utils';
-import { DiagAPI } from './diag';
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ContextAPI = void 0;
+const NoopContextManager_1 = require("../context/NoopContextManager");
+const global_utils_1 = require("../internal/global-utils");
+const diag_1 = require("./diag");
 const API_NAME = 'context';
-const NOOP_CONTEXT_MANAGER = new NoopContextManager();
+const NOOP_CONTEXT_MANAGER = new NoopContextManager_1.NoopContextManager();
 /**
  * Singleton object which represents the entry point to the OpenTelemetry Context API
  */
-export class ContextAPI {
+class ContextAPI {
     /** Empty private constructor prevents end users from constructing a new instance of the API */
     constructor() { }
     /** Get the singleton instance of the Context API */
@@ -37,7 +40,7 @@ export class ContextAPI {
      * @returns true if the context manager was successfully registered, else false
      */
     setGlobalContextManager(contextManager) {
-        return registerGlobal(API_NAME, contextManager, DiagAPI.instance());
+        return (0, global_utils_1.registerGlobal)(API_NAME, contextManager, diag_1.DiagAPI.instance());
     }
     /**
      * Get the currently active context
@@ -66,12 +69,13 @@ export class ContextAPI {
         return this._getContextManager().bind(context, target);
     }
     _getContextManager() {
-        return getGlobal(API_NAME) || NOOP_CONTEXT_MANAGER;
+        return (0, global_utils_1.getGlobal)(API_NAME) || NOOP_CONTEXT_MANAGER;
     }
     /** Disable and remove the global context manager */
     disable() {
         this._getContextManager().disable();
-        unregisterGlobal(API_NAME, DiagAPI.instance());
+        (0, global_utils_1.unregisterGlobal)(API_NAME, diag_1.DiagAPI.instance());
     }
 }
+exports.ContextAPI = ContextAPI;
 //# sourceMappingURL=context.js.map

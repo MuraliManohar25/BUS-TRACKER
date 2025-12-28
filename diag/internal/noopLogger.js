@@ -1,3 +1,4 @@
+"use strict";
 /*
  * Copyright The OpenTelemetry Authors
  *
@@ -13,13 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.createNoopDiagLogger = void 0;
 function noopLogFunction() { }
 /**
  * Returns a No-Op Diagnostic logger where all messages do nothing.
  * @implements {@link DiagLogger}
  * @returns {DiagLogger}
  */
-export function createNoopDiagLogger() {
+function createNoopDiagLogger() {
     return {
         verbose: noopLogFunction,
         debug: noopLogFunction,
@@ -28,4 +31,5 @@ export function createNoopDiagLogger() {
         error: noopLogFunction,
     };
 }
+exports.createNoopDiagLogger = createNoopDiagLogger;
 //# sourceMappingURL=noopLogger.js.map

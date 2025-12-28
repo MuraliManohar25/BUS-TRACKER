@@ -1,3 +1,4 @@
+"use strict";
 /*
  * Copyright The OpenTelemetry Authors
  *
@@ -13,7 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export class BaggageImpl {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.BaggageImpl = void 0;
+class BaggageImpl {
     constructor(entries) {
         this._entries = entries ? new Map(entries) : new Map();
     }
@@ -48,4 +51,5 @@ export class BaggageImpl {
         return new BaggageImpl();
     }
 }
+exports.BaggageImpl = BaggageImpl;
 //# sourceMappingURL=baggage-impl.js.map
