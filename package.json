@@ -6,12 +6,9 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "install-functions": "cd functions && npm install",
     "firebase": "npx firebase-tools",
-    "deploy-functions": "cd functions && npx firebase-tools deploy --only functions",
-    "deploy": "npm run build && npx firebase-tools deploy",
+    "deploy": "npm run build && npx firebase-tools deploy --only hosting,firestore",
     "deploy:hosting": "npm run build && npx firebase-tools deploy --only hosting",
-    "deploy:functions": "cd functions && npx firebase-tools deploy --only functions",
     "deploy:firestore": "npx firebase-tools deploy --only firestore",
     "firebase:login": "npx firebase-tools login",
     "firebase:init": "npx firebase-tools init"
