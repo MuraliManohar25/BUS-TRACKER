@@ -1,119 +1,909 @@
-import type * as grpc from '../index';
-import type { MessageTypeDefinition } from '@grpc/proto-loader';
+/*
+ * Copyright 2021 gRPC authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
 
-import type { Any as _google_protobuf_Any, Any__Output as _google_protobuf_Any__Output } from './google/protobuf/Any';
-import type { BoolValue as _google_protobuf_BoolValue, BoolValue__Output as _google_protobuf_BoolValue__Output } from './google/protobuf/BoolValue';
-import type { BytesValue as _google_protobuf_BytesValue, BytesValue__Output as _google_protobuf_BytesValue__Output } from './google/protobuf/BytesValue';
-import type { DoubleValue as _google_protobuf_DoubleValue, DoubleValue__Output as _google_protobuf_DoubleValue__Output } from './google/protobuf/DoubleValue';
-import type { Duration as _google_protobuf_Duration, Duration__Output as _google_protobuf_Duration__Output } from './google/protobuf/Duration';
-import type { FloatValue as _google_protobuf_FloatValue, FloatValue__Output as _google_protobuf_FloatValue__Output } from './google/protobuf/FloatValue';
-import type { Int32Value as _google_protobuf_Int32Value, Int32Value__Output as _google_protobuf_Int32Value__Output } from './google/protobuf/Int32Value';
-import type { Int64Value as _google_protobuf_Int64Value, Int64Value__Output as _google_protobuf_Int64Value__Output } from './google/protobuf/Int64Value';
-import type { StringValue as _google_protobuf_StringValue, StringValue__Output as _google_protobuf_StringValue__Output } from './google/protobuf/StringValue';
-import type { Timestamp as _google_protobuf_Timestamp, Timestamp__Output as _google_protobuf_Timestamp__Output } from './google/protobuf/Timestamp';
-import type { UInt32Value as _google_protobuf_UInt32Value, UInt32Value__Output as _google_protobuf_UInt32Value__Output } from './google/protobuf/UInt32Value';
-import type { UInt64Value as _google_protobuf_UInt64Value, UInt64Value__Output as _google_protobuf_UInt64Value__Output } from './google/protobuf/UInt64Value';
-import type { Address as _grpc_channelz_v1_Address, Address__Output as _grpc_channelz_v1_Address__Output } from './grpc/channelz/v1/Address';
-import type { Channel as _grpc_channelz_v1_Channel, Channel__Output as _grpc_channelz_v1_Channel__Output } from './grpc/channelz/v1/Channel';
-import type { ChannelConnectivityState as _grpc_channelz_v1_ChannelConnectivityState, ChannelConnectivityState__Output as _grpc_channelz_v1_ChannelConnectivityState__Output } from './grpc/channelz/v1/ChannelConnectivityState';
-import type { ChannelData as _grpc_channelz_v1_ChannelData, ChannelData__Output as _grpc_channelz_v1_ChannelData__Output } from './grpc/channelz/v1/ChannelData';
-import type { ChannelRef as _grpc_channelz_v1_ChannelRef, ChannelRef__Output as _grpc_channelz_v1_ChannelRef__Output } from './grpc/channelz/v1/ChannelRef';
-import type { ChannelTrace as _grpc_channelz_v1_ChannelTrace, ChannelTrace__Output as _grpc_channelz_v1_ChannelTrace__Output } from './grpc/channelz/v1/ChannelTrace';
-import type { ChannelTraceEvent as _grpc_channelz_v1_ChannelTraceEvent, ChannelTraceEvent__Output as _grpc_channelz_v1_ChannelTraceEvent__Output } from './grpc/channelz/v1/ChannelTraceEvent';
-import type { ChannelzClient as _grpc_channelz_v1_ChannelzClient, ChannelzDefinition as _grpc_channelz_v1_ChannelzDefinition } from './grpc/channelz/v1/Channelz';
-import type { GetChannelRequest as _grpc_channelz_v1_GetChannelRequest, GetChannelRequest__Output as _grpc_channelz_v1_GetChannelRequest__Output } from './grpc/channelz/v1/GetChannelRequest';
-import type { GetChannelResponse as _grpc_channelz_v1_GetChannelResponse, GetChannelResponse__Output as _grpc_channelz_v1_GetChannelResponse__Output } from './grpc/channelz/v1/GetChannelResponse';
-import type { GetServerRequest as _grpc_channelz_v1_GetServerRequest, GetServerRequest__Output as _grpc_channelz_v1_GetServerRequest__Output } from './grpc/channelz/v1/GetServerRequest';
-import type { GetServerResponse as _grpc_channelz_v1_GetServerResponse, GetServerResponse__Output as _grpc_channelz_v1_GetServerResponse__Output } from './grpc/channelz/v1/GetServerResponse';
-import type { GetServerSocketsRequest as _grpc_channelz_v1_GetServerSocketsRequest, GetServerSocketsRequest__Output as _grpc_channelz_v1_GetServerSocketsRequest__Output } from './grpc/channelz/v1/GetServerSocketsRequest';
-import type { GetServerSocketsResponse as _grpc_channelz_v1_GetServerSocketsResponse, GetServerSocketsResponse__Output as _grpc_channelz_v1_GetServerSocketsResponse__Output } from './grpc/channelz/v1/GetServerSocketsResponse';
-import type { GetServersRequest as _grpc_channelz_v1_GetServersRequest, GetServersRequest__Output as _grpc_channelz_v1_GetServersRequest__Output } from './grpc/channelz/v1/GetServersRequest';
-import type { GetServersResponse as _grpc_channelz_v1_GetServersResponse, GetServersResponse__Output as _grpc_channelz_v1_GetServersResponse__Output } from './grpc/channelz/v1/GetServersResponse';
-import type { GetSocketRequest as _grpc_channelz_v1_GetSocketRequest, GetSocketRequest__Output as _grpc_channelz_v1_GetSocketRequest__Output } from './grpc/channelz/v1/GetSocketRequest';
-import type { GetSocketResponse as _grpc_channelz_v1_GetSocketResponse, GetSocketResponse__Output as _grpc_channelz_v1_GetSocketResponse__Output } from './grpc/channelz/v1/GetSocketResponse';
-import type { GetSubchannelRequest as _grpc_channelz_v1_GetSubchannelRequest, GetSubchannelRequest__Output as _grpc_channelz_v1_GetSubchannelRequest__Output } from './grpc/channelz/v1/GetSubchannelRequest';
-import type { GetSubchannelResponse as _grpc_channelz_v1_GetSubchannelResponse, GetSubchannelResponse__Output as _grpc_channelz_v1_GetSubchannelResponse__Output } from './grpc/channelz/v1/GetSubchannelResponse';
-import type { GetTopChannelsRequest as _grpc_channelz_v1_GetTopChannelsRequest, GetTopChannelsRequest__Output as _grpc_channelz_v1_GetTopChannelsRequest__Output } from './grpc/channelz/v1/GetTopChannelsRequest';
-import type { GetTopChannelsResponse as _grpc_channelz_v1_GetTopChannelsResponse, GetTopChannelsResponse__Output as _grpc_channelz_v1_GetTopChannelsResponse__Output } from './grpc/channelz/v1/GetTopChannelsResponse';
-import type { Security as _grpc_channelz_v1_Security, Security__Output as _grpc_channelz_v1_Security__Output } from './grpc/channelz/v1/Security';
-import type { Server as _grpc_channelz_v1_Server, Server__Output as _grpc_channelz_v1_Server__Output } from './grpc/channelz/v1/Server';
-import type { ServerData as _grpc_channelz_v1_ServerData, ServerData__Output as _grpc_channelz_v1_ServerData__Output } from './grpc/channelz/v1/ServerData';
-import type { ServerRef as _grpc_channelz_v1_ServerRef, ServerRef__Output as _grpc_channelz_v1_ServerRef__Output } from './grpc/channelz/v1/ServerRef';
-import type { Socket as _grpc_channelz_v1_Socket, Socket__Output as _grpc_channelz_v1_Socket__Output } from './grpc/channelz/v1/Socket';
-import type { SocketData as _grpc_channelz_v1_SocketData, SocketData__Output as _grpc_channelz_v1_SocketData__Output } from './grpc/channelz/v1/SocketData';
-import type { SocketOption as _grpc_channelz_v1_SocketOption, SocketOption__Output as _grpc_channelz_v1_SocketOption__Output } from './grpc/channelz/v1/SocketOption';
-import type { SocketOptionLinger as _grpc_channelz_v1_SocketOptionLinger, SocketOptionLinger__Output as _grpc_channelz_v1_SocketOptionLinger__Output } from './grpc/channelz/v1/SocketOptionLinger';
-import type { SocketOptionTcpInfo as _grpc_channelz_v1_SocketOptionTcpInfo, SocketOptionTcpInfo__Output as _grpc_channelz_v1_SocketOptionTcpInfo__Output } from './grpc/channelz/v1/SocketOptionTcpInfo';
-import type { SocketOptionTimeout as _grpc_channelz_v1_SocketOptionTimeout, SocketOptionTimeout__Output as _grpc_channelz_v1_SocketOptionTimeout__Output } from './grpc/channelz/v1/SocketOptionTimeout';
-import type { SocketRef as _grpc_channelz_v1_SocketRef, SocketRef__Output as _grpc_channelz_v1_SocketRef__Output } from './grpc/channelz/v1/SocketRef';
-import type { Subchannel as _grpc_channelz_v1_Subchannel, Subchannel__Output as _grpc_channelz_v1_Subchannel__Output } from './grpc/channelz/v1/Subchannel';
-import type { SubchannelRef as _grpc_channelz_v1_SubchannelRef, SubchannelRef__Output as _grpc_channelz_v1_SubchannelRef__Output } from './grpc/channelz/v1/SubchannelRef';
+import { isIPv4, isIPv6 } from 'net';
+import { OrderedMap, type OrderedMapIterator } from '@js-sdsl/ordered-map';
+import { ConnectivityState } from './connectivity-state';
+import { Status } from './constants';
+import { Timestamp } from './generated/google/protobuf/Timestamp';
+import { Channel as ChannelMessage } from './generated/grpc/channelz/v1/Channel';
+import { ChannelConnectivityState__Output } from './generated/grpc/channelz/v1/ChannelConnectivityState';
+import { ChannelRef as ChannelRefMessage } from './generated/grpc/channelz/v1/ChannelRef';
+import { ChannelTrace } from './generated/grpc/channelz/v1/ChannelTrace';
+import { GetChannelRequest__Output } from './generated/grpc/channelz/v1/GetChannelRequest';
+import { GetChannelResponse } from './generated/grpc/channelz/v1/GetChannelResponse';
+import { sendUnaryData, ServerUnaryCall } from './server-call';
+import { ServerRef as ServerRefMessage } from './generated/grpc/channelz/v1/ServerRef';
+import { SocketRef as SocketRefMessage } from './generated/grpc/channelz/v1/SocketRef';
+import {
+  isTcpSubchannelAddress,
+  SubchannelAddress,
+} from './subchannel-address';
+import { SubchannelRef as SubchannelRefMessage } from './generated/grpc/channelz/v1/SubchannelRef';
+import { GetServerRequest__Output } from './generated/grpc/channelz/v1/GetServerRequest';
+import { GetServerResponse } from './generated/grpc/channelz/v1/GetServerResponse';
+import { Server as ServerMessage } from './generated/grpc/channelz/v1/Server';
+import { GetServersRequest__Output } from './generated/grpc/channelz/v1/GetServersRequest';
+import { GetServersResponse } from './generated/grpc/channelz/v1/GetServersResponse';
+import { GetTopChannelsRequest__Output } from './generated/grpc/channelz/v1/GetTopChannelsRequest';
+import { GetTopChannelsResponse } from './generated/grpc/channelz/v1/GetTopChannelsResponse';
+import { GetSubchannelRequest__Output } from './generated/grpc/channelz/v1/GetSubchannelRequest';
+import { GetSubchannelResponse } from './generated/grpc/channelz/v1/GetSubchannelResponse';
+import { Subchannel as SubchannelMessage } from './generated/grpc/channelz/v1/Subchannel';
+import { GetSocketRequest__Output } from './generated/grpc/channelz/v1/GetSocketRequest';
+import { GetSocketResponse } from './generated/grpc/channelz/v1/GetSocketResponse';
+import { Socket as SocketMessage } from './generated/grpc/channelz/v1/Socket';
+import { Address } from './generated/grpc/channelz/v1/Address';
+import { Security } from './generated/grpc/channelz/v1/Security';
+import { GetServerSocketsRequest__Output } from './generated/grpc/channelz/v1/GetServerSocketsRequest';
+import { GetServerSocketsResponse } from './generated/grpc/channelz/v1/GetServerSocketsResponse';
+import {
+  ChannelzDefinition,
+  ChannelzHandlers,
+} from './generated/grpc/channelz/v1/Channelz';
+import { ProtoGrpcType as ChannelzProtoGrpcType } from './generated/channelz';
+import type { loadSync } from '@grpc/proto-loader';
+import { registerAdminService } from './admin';
+import { loadPackageDefinition } from './make-client';
 
-type SubtypeConstructor<Constructor extends new (...args: any) => any, Subtype> = {
-  new(...args: ConstructorParameters<Constructor>): Subtype;
-};
+export type TraceSeverity =
+  | 'CT_UNKNOWN'
+  | 'CT_INFO'
+  | 'CT_WARNING'
+  | 'CT_ERROR';
 
-export interface ProtoGrpcType {
-  google: {
-    protobuf: {
-      Any: MessageTypeDefinition<_google_protobuf_Any, _google_protobuf_Any__Output>
-      BoolValue: MessageTypeDefinition<_google_protobuf_BoolValue, _google_protobuf_BoolValue__Output>
-      BytesValue: MessageTypeDefinition<_google_protobuf_BytesValue, _google_protobuf_BytesValue__Output>
-      DoubleValue: MessageTypeDefinition<_google_protobuf_DoubleValue, _google_protobuf_DoubleValue__Output>
-      Duration: MessageTypeDefinition<_google_protobuf_Duration, _google_protobuf_Duration__Output>
-      FloatValue: MessageTypeDefinition<_google_protobuf_FloatValue, _google_protobuf_FloatValue__Output>
-      Int32Value: MessageTypeDefinition<_google_protobuf_Int32Value, _google_protobuf_Int32Value__Output>
-      Int64Value: MessageTypeDefinition<_google_protobuf_Int64Value, _google_protobuf_Int64Value__Output>
-      StringValue: MessageTypeDefinition<_google_protobuf_StringValue, _google_protobuf_StringValue__Output>
-      Timestamp: MessageTypeDefinition<_google_protobuf_Timestamp, _google_protobuf_Timestamp__Output>
-      UInt32Value: MessageTypeDefinition<_google_protobuf_UInt32Value, _google_protobuf_UInt32Value__Output>
-      UInt64Value: MessageTypeDefinition<_google_protobuf_UInt64Value, _google_protobuf_UInt64Value__Output>
-    }
-  }
-  grpc: {
-    channelz: {
-      v1: {
-        Address: MessageTypeDefinition<_grpc_channelz_v1_Address, _grpc_channelz_v1_Address__Output>
-        Channel: MessageTypeDefinition<_grpc_channelz_v1_Channel, _grpc_channelz_v1_Channel__Output>
-        ChannelConnectivityState: MessageTypeDefinition<_grpc_channelz_v1_ChannelConnectivityState, _grpc_channelz_v1_ChannelConnectivityState__Output>
-        ChannelData: MessageTypeDefinition<_grpc_channelz_v1_ChannelData, _grpc_channelz_v1_ChannelData__Output>
-        ChannelRef: MessageTypeDefinition<_grpc_channelz_v1_ChannelRef, _grpc_channelz_v1_ChannelRef__Output>
-        ChannelTrace: MessageTypeDefinition<_grpc_channelz_v1_ChannelTrace, _grpc_channelz_v1_ChannelTrace__Output>
-        ChannelTraceEvent: MessageTypeDefinition<_grpc_channelz_v1_ChannelTraceEvent, _grpc_channelz_v1_ChannelTraceEvent__Output>
-        /**
-         * Channelz is a service exposed by gRPC servers that provides detailed debug
-         * information.
-         */
-        Channelz: SubtypeConstructor<typeof grpc.Client, _grpc_channelz_v1_ChannelzClient> & { service: _grpc_channelz_v1_ChannelzDefinition }
-        GetChannelRequest: MessageTypeDefinition<_grpc_channelz_v1_GetChannelRequest, _grpc_channelz_v1_GetChannelRequest__Output>
-        GetChannelResponse: MessageTypeDefinition<_grpc_channelz_v1_GetChannelResponse, _grpc_channelz_v1_GetChannelResponse__Output>
-        GetServerRequest: MessageTypeDefinition<_grpc_channelz_v1_GetServerRequest, _grpc_channelz_v1_GetServerRequest__Output>
-        GetServerResponse: MessageTypeDefinition<_grpc_channelz_v1_GetServerResponse, _grpc_channelz_v1_GetServerResponse__Output>
-        GetServerSocketsRequest: MessageTypeDefinition<_grpc_channelz_v1_GetServerSocketsRequest, _grpc_channelz_v1_GetServerSocketsRequest__Output>
-        GetServerSocketsResponse: MessageTypeDefinition<_grpc_channelz_v1_GetServerSocketsResponse, _grpc_channelz_v1_GetServerSocketsResponse__Output>
-        GetServersRequest: MessageTypeDefinition<_grpc_channelz_v1_GetServersRequest, _grpc_channelz_v1_GetServersRequest__Output>
-        GetServersResponse: MessageTypeDefinition<_grpc_channelz_v1_GetServersResponse, _grpc_channelz_v1_GetServersResponse__Output>
-        GetSocketRequest: MessageTypeDefinition<_grpc_channelz_v1_GetSocketRequest, _grpc_channelz_v1_GetSocketRequest__Output>
-        GetSocketResponse: MessageTypeDefinition<_grpc_channelz_v1_GetSocketResponse, _grpc_channelz_v1_GetSocketResponse__Output>
-        GetSubchannelRequest: MessageTypeDefinition<_grpc_channelz_v1_GetSubchannelRequest, _grpc_channelz_v1_GetSubchannelRequest__Output>
-        GetSubchannelResponse: MessageTypeDefinition<_grpc_channelz_v1_GetSubchannelResponse, _grpc_channelz_v1_GetSubchannelResponse__Output>
-        GetTopChannelsRequest: MessageTypeDefinition<_grpc_channelz_v1_GetTopChannelsRequest, _grpc_channelz_v1_GetTopChannelsRequest__Output>
-        GetTopChannelsResponse: MessageTypeDefinition<_grpc_channelz_v1_GetTopChannelsResponse, _grpc_channelz_v1_GetTopChannelsResponse__Output>
-        Security: MessageTypeDefinition<_grpc_channelz_v1_Security, _grpc_channelz_v1_Security__Output>
-        Server: MessageTypeDefinition<_grpc_channelz_v1_Server, _grpc_channelz_v1_Server__Output>
-        ServerData: MessageTypeDefinition<_grpc_channelz_v1_ServerData, _grpc_channelz_v1_ServerData__Output>
-        ServerRef: MessageTypeDefinition<_grpc_channelz_v1_ServerRef, _grpc_channelz_v1_ServerRef__Output>
-        Socket: MessageTypeDefinition<_grpc_channelz_v1_Socket, _grpc_channelz_v1_Socket__Output>
-        SocketData: MessageTypeDefinition<_grpc_channelz_v1_SocketData, _grpc_channelz_v1_SocketData__Output>
-        SocketOption: MessageTypeDefinition<_grpc_channelz_v1_SocketOption, _grpc_channelz_v1_SocketOption__Output>
-        SocketOptionLinger: MessageTypeDefinition<_grpc_channelz_v1_SocketOptionLinger, _grpc_channelz_v1_SocketOptionLinger__Output>
-        SocketOptionTcpInfo: MessageTypeDefinition<_grpc_channelz_v1_SocketOptionTcpInfo, _grpc_channelz_v1_SocketOptionTcpInfo__Output>
-        SocketOptionTimeout: MessageTypeDefinition<_grpc_channelz_v1_SocketOptionTimeout, _grpc_channelz_v1_SocketOptionTimeout__Output>
-        SocketRef: MessageTypeDefinition<_grpc_channelz_v1_SocketRef, _grpc_channelz_v1_SocketRef__Output>
-        Subchannel: MessageTypeDefinition<_grpc_channelz_v1_Subchannel, _grpc_channelz_v1_Subchannel__Output>
-        SubchannelRef: MessageTypeDefinition<_grpc_channelz_v1_SubchannelRef, _grpc_channelz_v1_SubchannelRef__Output>
-      }
-    }
+interface Ref {
+  kind: EntityTypes;
+  id: number;
+  name: string;
+}
+
+export interface ChannelRef extends Ref {
+  kind: EntityTypes.channel;
+}
+
+export interface SubchannelRef extends Ref {
+  kind: EntityTypes.subchannel;
+}
+
+export interface ServerRef extends Ref {
+  kind: EntityTypes.server;
+}
+
+export interface SocketRef extends Ref {
+  kind: EntityTypes.socket;
+}
+
+function channelRefToMessage(ref: ChannelRef): ChannelRefMessage {
+  return {
+    channel_id: ref.id,
+    name: ref.name,
+  };
+}
+
+function subchannelRefToMessage(ref: SubchannelRef): SubchannelRefMessage {
+  return {
+    subchannel_id: ref.id,
+    name: ref.name,
+  };
+}
+
+function serverRefToMessage(ref: ServerRef): ServerRefMessage {
+  return {
+    server_id: ref.id,
+  };
+}
+
+function socketRefToMessage(ref: SocketRef): SocketRefMessage {
+  return {
+    socket_id: ref.id,
+    name: ref.name,
+  };
+}
+
+interface TraceEvent {
+  description: string;
+  severity: TraceSeverity;
+  timestamp: Date;
+  childChannel?: ChannelRef;
+  childSubchannel?: SubchannelRef;
+}
+
+/**
+ * The loose upper bound on the number of events that should be retained in a
+ * trace. This may be exceeded by up to a factor of 2. Arbitrarily chosen as a
+ * number that should be large enough to contain the recent relevant
+ * information, but small enough to not use excessive memory.
+ */
+const TARGET_RETAINED_TRACES = 32;
+
+/**
+ * Default number of sockets/servers/channels/subchannels to return
+ */
+const DEFAULT_MAX_RESULTS = 100;
+
+export class ChannelzTraceStub {
+  readonly events: TraceEvent[] = [];
+  readonly creationTimestamp: Date = new Date();
+  readonly eventsLogged = 0;
+
+  addTrace(): void {}
+  getTraceMessage(): ChannelTrace {
+    return {
+      creation_timestamp: dateToProtoTimestamp(this.creationTimestamp),
+      num_events_logged: this.eventsLogged,
+      events: [],
+    };
   }
 }
 
+export class ChannelzTrace {
+  events: TraceEvent[] = [];
+  creationTimestamp: Date;
+  eventsLogged = 0;
+
+  constructor() {
+    this.creationTimestamp = new Date();
+  }
+
+  addTrace(
+    severity: TraceSeverity,
+    description: string,
+    child?: ChannelRef | SubchannelRef
+  ) {
+    const timestamp = new Date();
+    this.events.push({
+      description: description,
+      severity: severity,
+      timestamp: timestamp,
+      childChannel: child?.kind === 'channel' ? child : undefined,
+      childSubchannel: child?.kind === 'subchannel' ? child : undefined,
+    });
+    // Whenever the trace array gets too large, discard the first half
+    if (this.events.length >= TARGET_RETAINED_TRACES * 2) {
+      this.events = this.events.slice(TARGET_RETAINED_TRACES);
+    }
+    this.eventsLogged += 1;
+  }
+
+  getTraceMessage(): ChannelTrace {
+    return {
+      creation_timestamp: dateToProtoTimestamp(this.creationTimestamp),
+      num_events_logged: this.eventsLogged,
+      events: this.events.map(event => {
+        return {
+          description: event.description,
+          severity: event.severity,
+          timestamp: dateToProtoTimestamp(event.timestamp),
+          channel_ref: event.childChannel
+            ? channelRefToMessage(event.childChannel)
+            : null,
+          subchannel_ref: event.childSubchannel
+            ? subchannelRefToMessage(event.childSubchannel)
+            : null,
+        };
+      }),
+    };
+  }
+}
+
+type RefOrderedMap = OrderedMap<
+  number,
+  { ref: { id: number; kind: EntityTypes; name: string }; count: number }
+>;
+
+export class ChannelzChildrenTracker {
+  private channelChildren: RefOrderedMap = new OrderedMap();
+  private subchannelChildren: RefOrderedMap = new OrderedMap();
+  private socketChildren: RefOrderedMap = new OrderedMap();
+  private trackerMap = {
+    [EntityTypes.channel]: this.channelChildren,
+    [EntityTypes.subchannel]: this.subchannelChildren,
+    [EntityTypes.socket]: this.socketChildren,
+  } as const;
+
+  refChild(child: ChannelRef | SubchannelRef | SocketRef) {
+    const tracker = this.trackerMap[child.kind];
+    const trackedChild = tracker.find(child.id);
+
+    if (trackedChild.equals(tracker.end())) {
+      tracker.setElement(
+        child.id,
+        {
+          ref: child,
+          count: 1,
+        },
+        trackedChild
+      );
+    } else {
+      trackedChild.pointer[1].count += 1;
+    }
+  }
+
+  unrefChild(child: ChannelRef | SubchannelRef | SocketRef) {
+    const tracker = this.trackerMap[child.kind];
+    const trackedChild = tracker.getElementByKey(child.id);
+    if (trackedChild !== undefined) {
+      trackedChild.count -= 1;
+      if (trackedChild.count === 0) {
+        tracker.eraseElementByKey(child.id);
+      }
+    }
+  }
+
+  getChildLists(): ChannelzChildren {
+    return {
+      channels: this.channelChildren as ChannelzChildren['channels'],
+      subchannels: this.subchannelChildren as ChannelzChildren['subchannels'],
+      sockets: this.socketChildren as ChannelzChildren['sockets'],
+    };
+  }
+}
+
+export class ChannelzChildrenTrackerStub extends ChannelzChildrenTracker {
+  override refChild(): void {}
+  override unrefChild(): void {}
+}
+
+export class ChannelzCallTracker {
+  callsStarted = 0;
+  callsSucceeded = 0;
+  callsFailed = 0;
+  lastCallStartedTimestamp: Date | null = null;
+
+  addCallStarted() {
+    this.callsStarted += 1;
+    this.lastCallStartedTimestamp = new Date();
+  }
+  addCallSucceeded() {
+    this.callsSucceeded += 1;
+  }
+  addCallFailed() {
+    this.callsFailed += 1;
+  }
+}
+
+export class ChannelzCallTrackerStub extends ChannelzCallTracker {
+  override addCallStarted() {}
+  override addCallSucceeded() {}
+  override addCallFailed() {}
+}
+
+export interface ChannelzChildren {
+  channels: OrderedMap<number, { ref: ChannelRef; count: number }>;
+  subchannels: OrderedMap<number, { ref: SubchannelRef; count: number }>;
+  sockets: OrderedMap<number, { ref: SocketRef; count: number }>;
+}
+
+export interface ChannelInfo {
+  target: string;
+  state: ConnectivityState;
+  trace: ChannelzTrace | ChannelzTraceStub;
+  callTracker: ChannelzCallTracker | ChannelzCallTrackerStub;
+  children: ChannelzChildren;
+}
+
+export type SubchannelInfo = ChannelInfo;
+
+export interface ServerInfo {
+  trace: ChannelzTrace;
+  callTracker: ChannelzCallTracker;
+  listenerChildren: ChannelzChildren;
+  sessionChildren: ChannelzChildren;
+}
+
+export interface TlsInfo {
+  cipherSuiteStandardName: string | null;
+  cipherSuiteOtherName: string | null;
+  localCertificate: Buffer | null;
+  remoteCertificate: Buffer | null;
+}
+
+export interface SocketInfo {
+  localAddress: SubchannelAddress | null;
+  remoteAddress: SubchannelAddress | null;
+  security: TlsInfo | null;
+  remoteName: string | null;
+  streamsStarted: number;
+  streamsSucceeded: number;
+  streamsFailed: number;
+  messagesSent: number;
+  messagesReceived: number;
+  keepAlivesSent: number;
+  lastLocalStreamCreatedTimestamp: Date | null;
+  lastRemoteStreamCreatedTimestamp: Date | null;
+  lastMessageSentTimestamp: Date | null;
+  lastMessageReceivedTimestamp: Date | null;
+  localFlowControlWindow: number | null;
+  remoteFlowControlWindow: number | null;
+}
+
+interface ChannelEntry {
+  ref: ChannelRef;
+  getInfo(): ChannelInfo;
+}
+
+interface SubchannelEntry {
+  ref: SubchannelRef;
+  getInfo(): SubchannelInfo;
+}
+
+interface ServerEntry {
+  ref: ServerRef;
+  getInfo(): ServerInfo;
+}
+
+interface SocketEntry {
+  ref: SocketRef;
+  getInfo(): SocketInfo;
+}
+
+export const enum EntityTypes {
+  channel = 'channel',
+  subchannel = 'subchannel',
+  server = 'server',
+  socket = 'socket',
+}
+
+type EntryOrderedMap = OrderedMap<number, { ref: Ref; getInfo: () => any }>;
+
+const entityMaps = {
+  [EntityTypes.channel]: new OrderedMap<number, ChannelEntry>(),
+  [EntityTypes.subchannel]: new OrderedMap<number, SubchannelEntry>(),
+  [EntityTypes.server]: new OrderedMap<number, ServerEntry>(),
+  [EntityTypes.socket]: new OrderedMap<number, SocketEntry>(),
+} as const;
+
+export type RefByType<T extends EntityTypes> = T extends EntityTypes.channel
+  ? ChannelRef
+  : T extends EntityTypes.server
+  ? ServerRef
+  : T extends EntityTypes.socket
+  ? SocketRef
+  : T extends EntityTypes.subchannel
+  ? SubchannelRef
+  : never;
+
+export type EntryByType<T extends EntityTypes> = T extends EntityTypes.channel
+  ? ChannelEntry
+  : T extends EntityTypes.server
+  ? ServerEntry
+  : T extends EntityTypes.socket
+  ? SocketEntry
+  : T extends EntityTypes.subchannel
+  ? SubchannelEntry
+  : never;
+
+export type InfoByType<T extends EntityTypes> = T extends EntityTypes.channel
+  ? ChannelInfo
+  : T extends EntityTypes.subchannel
+  ? SubchannelInfo
+  : T extends EntityTypes.server
+  ? ServerInfo
+  : T extends EntityTypes.socket
+  ? SocketInfo
+  : never;
+
+const generateRegisterFn = <R extends EntityTypes>(kind: R) => {
+  let nextId = 1;
+  function getNextId(): number {
+    return nextId++;
+  }
+
+  const entityMap: EntryOrderedMap = entityMaps[kind];
+
+  return (
+    name: string,
+    getInfo: () => InfoByType<R>,
+    channelzEnabled: boolean
+  ): RefByType<R> => {
+    const id = getNextId();
+    const ref = { id, name, kind } as RefByType<R>;
+    if (channelzEnabled) {
+      entityMap.setElement(id, { ref, getInfo });
+    }
+    return ref;
+  };
+};
+
+export const registerChannelzChannel = generateRegisterFn(EntityTypes.channel);
+export const registerChannelzSubchannel = generateRegisterFn(
+  EntityTypes.subchannel
+);
+export const registerChannelzServer = generateRegisterFn(EntityTypes.server);
+export const registerChannelzSocket = generateRegisterFn(EntityTypes.socket);
+
+export function unregisterChannelzRef(
+  ref: ChannelRef | SubchannelRef | ServerRef | SocketRef
+) {
+  entityMaps[ref.kind].eraseElementByKey(ref.id);
+}
+
+/**
+ * Parse a single section of an IPv6 address as two bytes
+ * @param addressSection A hexadecimal string of length up to 4
+ * @returns The pair of bytes representing this address section
+ */
+function parseIPv6Section(addressSection: string): [number, number] {
+  const numberValue = Number.parseInt(addressSection, 16);
+  return [(numberValue / 256) | 0, numberValue % 256];
+}
+
+/**
+ * Parse a chunk of an IPv6 address string to some number of bytes
+ * @param addressChunk Some number of segments of up to 4 hexadecimal
+ *   characters each, joined by colons.
+ * @returns The list of bytes representing this address chunk
+ */
+function parseIPv6Chunk(addressChunk: string): number[] {
+  if (addressChunk === '') {
+    return [];
+  }
+  const bytePairs = addressChunk
+    .split(':')
+    .map(section => parseIPv6Section(section));
+  const result: number[] = [];
+  return result.concat(...bytePairs);
+}
+
+function isIPv6MappedIPv4(ipAddress: string) {
+  return isIPv6(ipAddress) && ipAddress.toLowerCase().startsWith('::ffff:') && isIPv4(ipAddress.substring(7));
+}
+
+/**
+ * Prerequisite: isIPv4(ipAddress)
+ * @param ipAddress
+ * @returns
+ */
+function ipv4AddressStringToBuffer(ipAddress: string): Buffer {
+  return Buffer.from(
+    Uint8Array.from(
+      ipAddress.split('.').map(segment => Number.parseInt(segment))
+    )
+  );
+}
+
+/**
+ * Converts an IPv4 or IPv6 address from string representation to binary
+ * representation
+ * @param ipAddress an IP address in standard IPv4 or IPv6 text format
+ * @returns
+ */
+function ipAddressStringToBuffer(ipAddress: string): Buffer | null {
+  if (isIPv4(ipAddress)) {
+    return ipv4AddressStringToBuffer(ipAddress);
+  } else if (isIPv6MappedIPv4(ipAddress)) {
+    return ipv4AddressStringToBuffer(ipAddress.substring(7));
+  } else if (isIPv6(ipAddress)) {
+    let leftSection: string;
+    let rightSection: string;
+    const doubleColonIndex = ipAddress.indexOf('::');
+    if (doubleColonIndex === -1) {
+      leftSection = ipAddress;
+      rightSection = '';
+    } else {
+      leftSection = ipAddress.substring(0, doubleColonIndex);
+      rightSection = ipAddress.substring(doubleColonIndex + 2);
+    }
+    const leftBuffer = Buffer.from(parseIPv6Chunk(leftSection));
+    const rightBuffer = Buffer.from(parseIPv6Chunk(rightSection));
+    const middleBuffer = Buffer.alloc(
+      16 - leftBuffer.length - rightBuffer.length,
+      0
+    );
+    return Buffer.concat([leftBuffer, middleBuffer, rightBuffer]);
+  } else {
+    return null;
+  }
+}
+
+function connectivityStateToMessage(
+  state: ConnectivityState
+): ChannelConnectivityState__Output {
+  switch (state) {
+    case ConnectivityState.CONNECTING:
+      return {
+        state: 'CONNECTING',
+      };
+    case ConnectivityState.IDLE:
+      return {
+        state: 'IDLE',
+      };
+    case ConnectivityState.READY:
+      return {
+        state: 'READY',
+      };
+    case ConnectivityState.SHUTDOWN:
+      return {
+        state: 'SHUTDOWN',
+      };
+    case ConnectivityState.TRANSIENT_FAILURE:
+      return {
+        state: 'TRANSIENT_FAILURE',
+      };
+    default:
+      return {
+        state: 'UNKNOWN',
+      };
+  }
+}
+
+function dateToProtoTimestamp(date?: Date | null): Timestamp | null {
+  if (!date) {
+    return null;
+  }
+  const millisSinceEpoch = date.getTime();
+  return {
+    seconds: (millisSinceEpoch / 1000) | 0,
+    nanos: (millisSinceEpoch % 1000) * 1_000_000,
+  };
+}
+
+function getChannelMessage(channelEntry: ChannelEntry): ChannelMessage {
+  const resolvedInfo = channelEntry.getInfo();
+  const channelRef: ChannelRefMessage[] = [];
+  const subchannelRef: SubchannelRefMessage[] = [];
+
+  resolvedInfo.children.channels.forEach(el => {
+    channelRef.push(channelRefToMessage(el[1].ref));
+  });
+
+  resolvedInfo.children.subchannels.forEach(el => {
+    subchannelRef.push(subchannelRefToMessage(el[1].ref));
+  });
+
+  return {
+    ref: channelRefToMessage(channelEntry.ref),
+    data: {
+      target: resolvedInfo.target,
+      state: connectivityStateToMessage(resolvedInfo.state),
+      calls_started: resolvedInfo.callTracker.callsStarted,
+      calls_succeeded: resolvedInfo.callTracker.callsSucceeded,
+      calls_failed: resolvedInfo.callTracker.callsFailed,
+      last_call_started_timestamp: dateToProtoTimestamp(
+        resolvedInfo.callTracker.lastCallStartedTimestamp
+      ),
+      trace: resolvedInfo.trace.getTraceMessage(),
+    },
+    channel_ref: channelRef,
+    subchannel_ref: subchannelRef,
+  };
+}
+
+function GetChannel(
+  call: ServerUnaryCall<GetChannelRequest__Output, GetChannelResponse>,
+  callback: sendUnaryData<GetChannelResponse>
+): void {
+  const channelId = parseInt(call.request.channel_id, 10);
+  const channelEntry =
+    entityMaps[EntityTypes.channel].getElementByKey(channelId);
+  if (channelEntry === undefined) {
+    callback({
+      code: Status.NOT_FOUND,
+      details: 'No channel data found for id ' + channelId,
+    });
+    return;
+  }
+  callback(null, { channel: getChannelMessage(channelEntry) });
+}
+
+function GetTopChannels(
+  call: ServerUnaryCall<GetTopChannelsRequest__Output, GetTopChannelsResponse>,
+  callback: sendUnaryData<GetTopChannelsResponse>
+): void {
+  const maxResults =
+    parseInt(call.request.max_results, 10) || DEFAULT_MAX_RESULTS;
+  const resultList: ChannelMessage[] = [];
+  const startId = parseInt(call.request.start_channel_id, 10);
+  const channelEntries = entityMaps[EntityTypes.channel];
+
+  let i: OrderedMapIterator<number, ChannelEntry>;
+  for (
+    i = channelEntries.lowerBound(startId);
+    !i.equals(channelEntries.end()) && resultList.length < maxResults;
+    i = i.next()
+  ) {
+    resultList.push(getChannelMessage(i.pointer[1]));
+  }
+
+  callback(null, {
+    channel: resultList,
+    end: i.equals(channelEntries.end()),
+  });
+}
+
+function getServerMessage(serverEntry: ServerEntry): ServerMessage {
+  const resolvedInfo = serverEntry.getInfo();
+  const listenSocket: SocketRefMessage[] = [];
+
+  resolvedInfo.listenerChildren.sockets.forEach(el => {
+    listenSocket.push(socketRefToMessage(el[1].ref));
+  });
+
+  return {
+    ref: serverRefToMessage(serverEntry.ref),
+    data: {
+      calls_started: resolvedInfo.callTracker.callsStarted,
+      calls_succeeded: resolvedInfo.callTracker.callsSucceeded,
+      calls_failed: resolvedInfo.callTracker.callsFailed,
+      last_call_started_timestamp: dateToProtoTimestamp(
+        resolvedInfo.callTracker.lastCallStartedTimestamp
+      ),
+      trace: resolvedInfo.trace.getTraceMessage(),
+    },
+    listen_socket: listenSocket,
+  };
+}
+
+function GetServer(
+  call: ServerUnaryCall<GetServerRequest__Output, GetServerResponse>,
+  callback: sendUnaryData<GetServerResponse>
+): void {
+  const serverId = parseInt(call.request.server_id, 10);
+  const serverEntries = entityMaps[EntityTypes.server];
+  const serverEntry = serverEntries.getElementByKey(serverId);
+  if (serverEntry === undefined) {
+    callback({
+      code: Status.NOT_FOUND,
+      details: 'No server data found for id ' + serverId,
+    });
+    return;
+  }
+  callback(null, { server: getServerMessage(serverEntry) });
+}
+
+function GetServers(
+  call: ServerUnaryCall<GetServersRequest__Output, GetServersResponse>,
+  callback: sendUnaryData<GetServersResponse>
+): void {
+  const maxResults =
+    parseInt(call.request.max_results, 10) || DEFAULT_MAX_RESULTS;
+  const startId = parseInt(call.request.start_server_id, 10);
+  const serverEntries = entityMaps[EntityTypes.server];
+  const resultList: ServerMessage[] = [];
+
+  let i: OrderedMapIterator<number, ServerEntry>;
+  for (
+    i = serverEntries.lowerBound(startId);
+    !i.equals(serverEntries.end()) && resultList.length < maxResults;
+    i = i.next()
+  ) {
+    resultList.push(getServerMessage(i.pointer[1]));
+  }
+
+  callback(null, {
+    server: resultList,
+    end: i.equals(serverEntries.end()),
+  });
+}
+
+function GetSubchannel(
+  call: ServerUnaryCall<GetSubchannelRequest__Output, GetSubchannelResponse>,
+  callback: sendUnaryData<GetSubchannelResponse>
+): void {
+  const subchannelId = parseInt(call.request.subchannel_id, 10);
+  const subchannelEntry =
+    entityMaps[EntityTypes.subchannel].getElementByKey(subchannelId);
+  if (subchannelEntry === undefined) {
+    callback({
+      code: Status.NOT_FOUND,
+      details: 'No subchannel data found for id ' + subchannelId,
+    });
+    return;
+  }
+  const resolvedInfo = subchannelEntry.getInfo();
+  const listenSocket: SocketRefMessage[] = [];
+
+  resolvedInfo.children.sockets.forEach(el => {
+    listenSocket.push(socketRefToMessage(el[1].ref));
+  });
+
+  const subchannelMessage: SubchannelMessage = {
+    ref: subchannelRefToMessage(subchannelEntry.ref),
+    data: {
+      target: resolvedInfo.target,
+      state: connectivityStateToMessage(resolvedInfo.state),
+      calls_started: resolvedInfo.callTracker.callsStarted,
+      calls_succeeded: resolvedInfo.callTracker.callsSucceeded,
+      calls_failed: resolvedInfo.callTracker.callsFailed,
+      last_call_started_timestamp: dateToProtoTimestamp(
+        resolvedInfo.callTracker.lastCallStartedTimestamp
+      ),
+      trace: resolvedInfo.trace.getTraceMessage(),
+    },
+    socket_ref: listenSocket,
+  };
+  callback(null, { subchannel: subchannelMessage });
+}
+
+function subchannelAddressToAddressMessage(
+  subchannelAddress: SubchannelAddress
+): Address {
+  if (isTcpSubchannelAddress(subchannelAddress)) {
+    return {
+      address: 'tcpip_address',
+      tcpip_address: {
+        ip_address:
+          ipAddressStringToBuffer(subchannelAddress.host) ?? undefined,
+        port: subchannelAddress.port,
+      },
+    };
+  } else {
+    return {
+      address: 'uds_address',
+      uds_address: {
+        filename: subchannelAddress.path,
+      },
+    };
+  }
+}
+
+function GetSocket(
+  call: ServerUnaryCall<GetSocketRequest__Output, GetSocketResponse>,
+  callback: sendUnaryData<GetSocketResponse>
+): void {
+  const socketId = parseInt(call.request.socket_id, 10);
+  const socketEntry = entityMaps[EntityTypes.socket].getElementByKey(socketId);
+  if (socketEntry === undefined) {
+    callback({
+      code: Status.NOT_FOUND,
+      details: 'No socket data found for id ' + socketId,
+    });
+    return;
+  }
+  const resolvedInfo = socketEntry.getInfo();
+  const securityMessage: Security | null = resolvedInfo.security
+    ? {
+        model: 'tls',
+        tls: {
+          cipher_suite: resolvedInfo.security.cipherSuiteStandardName
+            ? 'standard_name'
+            : 'other_name',
+          standard_name:
+            resolvedInfo.security.cipherSuiteStandardName ?? undefined,
+          other_name: resolvedInfo.security.cipherSuiteOtherName ?? undefined,
+          local_certificate:
+            resolvedInfo.security.localCertificate ?? undefined,
+          remote_certificate:
+            resolvedInfo.security.remoteCertificate ?? undefined,
+        },
+      }
+    : null;
+  const socketMessage: SocketMessage = {
+    ref: socketRefToMessage(socketEntry.ref),
+    local: resolvedInfo.localAddress
+      ? subchannelAddressToAddressMessage(resolvedInfo.localAddress)
+      : null,
+    remote: resolvedInfo.remoteAddress
+      ? subchannelAddressToAddressMessage(resolvedInfo.remoteAddress)
+      : null,
+    remote_name: resolvedInfo.remoteName ?? undefined,
+    security: securityMessage,
+    data: {
+      keep_alives_sent: resolvedInfo.keepAlivesSent,
+      streams_started: resolvedInfo.streamsStarted,
+      streams_succeeded: resolvedInfo.streamsSucceeded,
+      streams_failed: resolvedInfo.streamsFailed,
+      last_local_stream_created_timestamp: dateToProtoTimestamp(
+        resolvedInfo.lastLocalStreamCreatedTimestamp
+      ),
+      last_remote_stream_created_timestamp: dateToProtoTimestamp(
+        resolvedInfo.lastRemoteStreamCreatedTimestamp
+      ),
+      messages_received: resolvedInfo.messagesReceived,
+      messages_sent: resolvedInfo.messagesSent,
+      last_message_received_timestamp: dateToProtoTimestamp(
+        resolvedInfo.lastMessageReceivedTimestamp
+      ),
+      last_message_sent_timestamp: dateToProtoTimestamp(
+        resolvedInfo.lastMessageSentTimestamp
+      ),
+      local_flow_control_window: resolvedInfo.localFlowControlWindow
+        ? { value: resolvedInfo.localFlowControlWindow }
+        : null,
+      remote_flow_control_window: resolvedInfo.remoteFlowControlWindow
+        ? { value: resolvedInfo.remoteFlowControlWindow }
+        : null,
+    },
+  };
+  callback(null, { socket: socketMessage });
+}
+
+function GetServerSockets(
+  call: ServerUnaryCall<
+    GetServerSocketsRequest__Output,
+    GetServerSocketsResponse
+  >,
+  callback: sendUnaryData<GetServerSocketsResponse>
+): void {
+  const serverId = parseInt(call.request.server_id, 10);
+  const serverEntry = entityMaps[EntityTypes.server].getElementByKey(serverId);
+
+  if (serverEntry === undefined) {
+    callback({
+      code: Status.NOT_FOUND,
+      details: 'No server data found for id ' + serverId,
+    });
+    return;
+  }
+
+  const startId = parseInt(call.request.start_socket_id, 10);
+  const maxResults =
+    parseInt(call.request.max_results, 10) || DEFAULT_MAX_RESULTS;
+  const resolvedInfo = serverEntry.getInfo();
+  // If we wanted to include listener sockets in the result, this line would
+  // instead say
+  // const allSockets = resolvedInfo.listenerChildren.sockets.concat(resolvedInfo.sessionChildren.sockets).sort((ref1, ref2) => ref1.id - ref2.id);
+  const allSockets = resolvedInfo.sessionChildren.sockets;
+  const resultList: SocketRefMessage[] = [];
+
+  let i: OrderedMapIterator<number, { ref: SocketRef }>;
+  for (
+    i = allSockets.lowerBound(startId);
+    !i.equals(allSockets.end()) && resultList.length < maxResults;
+    i = i.next()
+  ) {
+    resultList.push(socketRefToMessage(i.pointer[1].ref));
+  }
+
+  callback(null, {
+    socket_ref: resultList,
+    end: i.equals(allSockets.end()),
+  });
+}
+
+export function getChannelzHandlers(): ChannelzHandlers {
+  return {
+    GetChannel,
+    GetTopChannels,
+    GetServer,
+    GetServers,
+    GetSubchannel,
+    GetSocket,
+    GetServerSockets,
+  };
+}
+
+let loadedChannelzDefinition: ChannelzDefinition | null = null;
+
+export function getChannelzServiceDefinition(): ChannelzDefinition {
+  if (loadedChannelzDefinition) {
+    return loadedChannelzDefinition;
+  }
+  /* The purpose of this complexity is to avoid loading @grpc/proto-loader at
+   * runtime for users who will not use/enable channelz. */
+  const loaderLoadSync = require('@grpc/proto-loader')
+    .loadSync as typeof loadSync;
+  const loadedProto = loaderLoadSync('channelz.proto', {
+    keepCase: true,
+    longs: String,
+    enums: String,
+    defaults: true,
+    oneofs: true,
+    includeDirs: [`${__dirname}/../../proto`],
+  });
+  const channelzGrpcObject = loadPackageDefinition(
+    loadedProto
+  ) as unknown as ChannelzProtoGrpcType;
+  loadedChannelzDefinition =
+    channelzGrpcObject.grpc.channelz.v1.Channelz.service;
+  return loadedChannelzDefinition;
+}
+
+export function setup() {
+  registerAdminService(getChannelzServiceDefinition, getChannelzHandlers);
+}
